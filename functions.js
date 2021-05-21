@@ -10,8 +10,9 @@ const books = require("./books.json");
  ****************************************************************/
 function getBookById(bookId, books) {
   // Your code goes here
+  return books.find(book=> book["id"]===bookId);
 }
-// console.log(getBookById(12, books));
+//  console.log(getBookById(12, books));
 
 /**************************************************************
  * getAuthorByName(authorName, authors):
@@ -22,8 +23,9 @@ function getBookById(bookId, books) {
  ****************************************************************/
 function getAuthorByName(authorName, authors) {
   // Your code goes here
+  return authors.find(author=> author.name.toUpperCase()===authorName.toUpperCase());
 }
-// console.log(getAuthorByName("J.K. Rowling", authors));
+  // console.log(getAuthorByName("J.K. Rowling", authors));
 
 /**************************************************************
  * bookCountsByAuthor(authors):
@@ -33,8 +35,9 @@ function getAuthorByName(authorName, authors) {
  ****************************************************************/
 function bookCountsByAuthor(authors) {
   // Your code goes here
+ return authors.map(author=> `author: ${author.name}, bookCount: ${author.books.length}`);
 }
-// console.log(bookCountsByAuthor(authors));
+//  console.log(bookCountsByAuthor(authors));
 
 /**************************************************************
  * booksByColor(books):
@@ -44,11 +47,9 @@ function bookCountsByAuthor(authors) {
  *    { <COLOR>: [<BOOK_TITLES>] }
  ****************************************************************/
 function booksByColor(books) {
-  const colors = {};
-
-  // Your code goes here
-
-  return colors;
+  let colors = {};
+  colors = books.map(book => `${book.color}: ${book.title}`);
+ return colors;
 }
 // console.log(booksByColor(books));
 
@@ -62,6 +63,9 @@ function booksByColor(books) {
  ****************************************************************/
 function titlesByAuthorName(authorName, authors, books) {
   // Your code goes here
+  return (`${books.map(book=> book.authors.some(author=> author.name===authorName))}` )
+  // let a = books.find(book=> book.authors["name"]===authorName)
+
 }
 // console.log(titlesByAuthorName("George R.R. Martin", authors, books));
 
@@ -113,8 +117,14 @@ function relatedBooks(bookId, authors, books) {
  ****************************************************************/
 function friendliestAuthor(authors) {
   // Your code goes here
+ let num = authors.map(author=> author.books.length);
+ let long = Math.max(...num);
+ let n = authors.filter(author=> author.books.length===long);
+ return n;
+//  return n.find(nn=> nn.name);
+
 }
-// console.log(friendliestAuthor(authors));
+ console.log(friendliestAuthor(authors));
 
 module.exports = {
   getBookById,
