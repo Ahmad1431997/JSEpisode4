@@ -25,7 +25,7 @@ function getAuthorByName(authorName, authors) {
   // Your code goes here
   return authors.find(author=> author.name.toUpperCase()===authorName.toUpperCase());
 }
-  // console.log(getAuthorByName("J.K. Rowling", authors));
+  //  console.log(getAuthorByName("J.K. Rowling", authors));
 
 /**************************************************************
  * bookCountsByAuthor(authors):
@@ -35,7 +35,12 @@ function getAuthorByName(authorName, authors) {
  ****************************************************************/
 function bookCountsByAuthor(authors) {
   // Your code goes here
- return authors.map(author=> `author: ${author.name}, bookCount: ${author.books.length}`);
+//  let sol= authors.map(author=> { author : author.name, bookCount : author["books"].length)};
+let sol = authors.map(function(author) {
+  return {author: author["name"], bookCount: author["books"].length}
+})
+
+return sol;
 }
 //  console.log(bookCountsByAuthor(authors));
 
@@ -48,8 +53,15 @@ function bookCountsByAuthor(authors) {
  ****************************************************************/
 function booksByColor(books) {
   let colors = {};
-  colors = books.map(book => `${book.color}: ${book.title}`);
- return colors;
+  books.forEach(function(book){
+    if (colors[book["color"]]) {
+      colors[book["color"]].push(book["title"])
+    }
+    else {
+      colors[book["color"]] = [book["title"]]
+    }
+  })
+  return colors;
 }
 // console.log(booksByColor(books));
 
@@ -63,11 +75,21 @@ function booksByColor(books) {
  ****************************************************************/
 function titlesByAuthorName(authorName, authors, books) {
   // Your code goes here
-  return (`${books.map(book=> book.authors.some(author=> author.name===authorName))}` )
-  // let a = books.find(book=> book.authors["name"]===authorName)
+  let titles = []
+  books.forEach(book=> {
+    book["authors"].forEach(auth=>  {
+       if (auth["name"].toLowerCase() == authorName.toLowerCase()) {
+         titles.push(book["title"])
+        
+       }
+    })
+ 
+  })
+ 
+  return titles
 
 }
-// console.log(titlesByAuthorName("George R.R. Martin", authors, books));
+ console.log(titlesByAuthorName("George R.R. Martin", authors, books));
 
 /**************************************************************
  * mostProlificAuthor(authors):
@@ -78,7 +100,16 @@ function titlesByAuthorName(authorName, authors, books) {
  ****************************************************************/
 function mostProlificAuthor(authors) {
   // Your code goes here
+  let x =  bookCountsByAuthor(authors).sort(function(a, b){
+    if (a.bookCount > b.bookCount) return 1;
+    if (b.bookCount > a.bookCount) return -1;
+  
+    return 0;
+  });
+  return x[x.length -1].author 
+
 }
+
 // console.log(mostProlificAuthor(authors));
 
 /**************************************************************
@@ -106,7 +137,39 @@ function mostProlificAuthor(authors) {
  ****************************************************************/
 function relatedBooks(bookId, authors, books) {
   // Your code goes here
-}
+
+  
+//  let id1= authors.find(author=> author.books.find(book=> bookId===book ));
+//  let id2=id1.books;
+// //  let x = books.map(book=> book.title);
+//  let bo = books.map(book=> book.id);
+//  let a=[];
+//  let sol;
+//  let x;
+// //  return bo;
+ 
+//    for (let i =0 ; i <= id2.length;i++){
+//     for (let ii=0 ; ii<= bo.length-1; ii++){
+    
+//         if ( id2[i] === bo[ii] )
+//          { a = bo[ii]; 
+//           sol=[];
+//           for ( t=0 ; t<=id2.length;t++ ){
+//          sol[t]= (getBookById(a, books)).title;}
+//         //  x = x.slice(-3);
+//         //   x= sol.title;
+//           // console.log(sol);
+//         }
+//     }
+// } 
+//   return sol;
+//    }
+//       for(const e of bo){
+//    if ( b === e ) {a= books.map(book=> book.title)};
+//       }
+  }
+
+
 // console.log(relatedBooks(50, authors, books));
 
 /**************************************************************
@@ -120,11 +183,11 @@ function friendliestAuthor(authors) {
  let num = authors.map(author=> author.books.length);
  let long = Math.max(...num);
  let n = authors.filter(author=> author.books.length===long);
- return n;
-//  return n.find(nn=> nn.name);
+ return ((n.map(nn=> nn.name)).slice(0,-1)).join();
+ 
 
 }
- console.log(friendliestAuthor(authors));
+//  console.log(friendliestAuthor(authors));
 
 module.exports = {
   getBookById,
